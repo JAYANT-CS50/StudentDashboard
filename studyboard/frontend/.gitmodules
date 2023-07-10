@@ -1,0 +1,3 @@
+[submodule "Studentboard_Frontend"]
+	path = Studentboard_Frontend
+	url = https://github.com/JAYANT-CS50/Studentboard_Frontend.git
