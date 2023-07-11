@@ -6,6 +6,7 @@ class SubjectList(models.Model):
     about = models.CharField(max_length=150)
     time = models.IntegerField(null=True, blank=True)
     chapter_count = models.IntegerField(default=0)
+    totatime = models.IntegerField(default=0)
     
 
     def __str__(self):

@@ -11,7 +11,7 @@ export const AllRoutes = ({subData, setSubData, formSubmitted, setFormSubmitted}
     <Routes>
       <Route path="/subjects" element={<Subjects subData={subData} setSubData={setSubData} />} />
       <Route path="/chapters" element={<Chapters subData={subData} setFormSubmitted={setFormSubmitted} formSubmitted={formSubmitted}/>} />
-      <Route path="/dashboard" element={ <Dashboard /> } />
+      <Route path="/dashboard" element={ <Dashboard subData={subData} setSubData={setSubData} /> } />
 
     </Routes>
     </>

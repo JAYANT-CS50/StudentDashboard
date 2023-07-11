@@ -2,8 +2,10 @@ import React from 'react'
 import { BarChart } from './BarChart'
 import { PieChart } from './PieChart'
 import { BarChartChapter } from './BarChartChapter'
+import { BubbleChart } from './BubbleChart'
+import { DoughnutChart } from './DoughnutChart'
 
-export const Dashboard = () => {
+export const Dashboard = ({subData, setSubData}) => {
   return (
     <main>
     <section className="max-w-7xl mx-auto py-7">
@@ -11,6 +13,8 @@ export const Dashboard = () => {
       <div className='w-1/2'><BarChart /></div>
       <div className='w-1/2'><BarChartChapter /></div>
       <div className='w-1/2'><PieChart /></div>
+      <div className='w-1/2'><BubbleChart subData={subData} setSubData={setSubData} /></div>
+      <div className='w-1/2'><DoughnutChart subData={subData} setSubData={setSubData} /></div>
       
       </div>
     </section>
