@@ -13,8 +13,8 @@ export const Dashboard = ({subData, setSubData}) => {
       <div className='w-1/2'><BarChart /></div>
       <div className='w-1/2'><BarChartChapter /></div>
       <div className='w-1/2'><PieChart /></div>
-      <div className='w-1/2'><BubbleChart subData={subData} setSubData={setSubData} /></div>
       <div className='w-1/2'><DoughnutChart subData={subData} setSubData={setSubData} /></div>
+      <div className='w-full'><BubbleChart subData={subData} setSubData={setSubData} /></div>
       
       </div>
     </section>

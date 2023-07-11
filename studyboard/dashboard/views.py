@@ -45,9 +45,10 @@ class ChapterListAV(APIView):
         if serializer.is_valid():
             serializer.save(subjectname=subject)
             subject.chapter_count = ChapterList.objects.filter(subjectname=subject).count()
+            totaltime = 0  # Initialize totaltime variable
             time = ChapterList.objects.filter(subjectname=subject)
             for t in time:
-                totaltime = totaltime + t.time
+                totaltime += t.time  # Sum up the time values
             subject.totaltime = totaltime
             subject.save()  # Save the subject object with the updated chapter_count
             return Response(serializer.data, status=status.HTTP_201_CREATED)

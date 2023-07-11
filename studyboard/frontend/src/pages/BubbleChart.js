@@ -4,10 +4,7 @@ import Chart from 'chart.js/auto';
 import axios from 'axios';
 
 export const BubbleChart = () => {
-
-
   const [data, setData] = useState([]);
-  // i need to get here total time with the api call for which i need to add sum the previous time as soon as new time is added at backend
 
   const handleChange = () => {
     axios.get('http://127.0.0.1:8000/dashboard/subjects/')
@@ -18,51 +15,60 @@ export const BubbleChart = () => {
 
   useEffect(() => {
     const chart = new Chart('bubble', {
-      type: 'bar',
+      type: 'bubble',
       data: {
         labels: data.map(row => row.name),
         datasets: [
           {
-            label: 'Chapters',
-            data: data.map(row => row.chapter_count),
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Set the background color for the first bar
-            borderColor: 'rgba(75, 192, 192, 1)', // Set the border color for the first bar
-            borderWidth: 1, // Set the border width for the first bar
-          },
-          {
-            label: 'Days',
-            data: data.map(row => row.time),
-            backgroundColor: 'rgba(255, 99, 132, 0.6)', // Set the background color for the second bar
-            borderColor: 'rgba(255, 99, 132, 1)', // Set the border color for the second bar
-            borderWidth: 1, // Set the border width for the second bar
+            label: 'Bubble Chart',
+            data: data.map(row => ({
+              x: row.chapter_count,
+              y: row.time,
+              r: row.totaltime,
+              subjectName: row.name, // Store the subject name as a custom property
+            })),
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
           },
         ],
       },
       options: {
         scales: {
           y: {
-            beginAtZero: true,
             title: {
               display: true,
-              text: 'No. of Days', // Specify the title text for the y-axis
+              text: 'No. of Chapters',
             },
-            ticks: {
-              precision: 0, // Set the precision of the tick values
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'No. of Days',
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              title: (context) => context[0].raw.subjectName, // Use the subject name as tooltip title
             },
           },
         },
       },
     });
 
-    // Clean up chart instance on component unmount
     return () => {
       chart.destroy();
     };
   }, [data]);
+
   return (
     <>
-    <canvas id="bubble"></canvas>
-    <button onClick={handleChange}>Show</button>
-  </>
-  )
-}
+      <canvas id="bubble"></canvas>
+      <button onClick={handleChange}>Show</button>
+    </>
+  );
+};
+
+
