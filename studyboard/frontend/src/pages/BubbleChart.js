@@ -22,9 +22,10 @@ export const BubbleChart = () => {
           {
             label: 'Bubble Chart',
             data: data.map(row => ({
-              x: row.chapter_count,
-              y: row.time,
-              r: row.totaltime,
+              
+              x: row.totaltime,
+              y: row.chapter_count,
+              r: row.time,
               subjectName: row.name, // Store the subject name as a custom property
             })),
             backgroundColor: 'rgba(75, 192, 192, 0.6)',
@@ -38,13 +39,13 @@ export const BubbleChart = () => {
           y: {
             title: {
               display: true,
-              text: 'No. of Chapters',
+              text: 'Chapters in Each Subject',
             },
           },
           x: {
             title: {
               display: true,
-              text: 'No. of Days',
+              text: 'Total Hours in Each Subject',
             },
           },
         },

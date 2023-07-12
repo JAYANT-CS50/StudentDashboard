@@ -14,7 +14,7 @@ export const PieChart = () => {
 
   useEffect(() => {
     const chart = new Chart('piechart', {
-      type: 'pie',
+      type: 'polarArea',
       data: {
         labels: data.map(row => row.name),
         datasets: [
