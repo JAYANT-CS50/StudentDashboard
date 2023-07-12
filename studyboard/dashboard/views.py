@@ -20,6 +20,14 @@ class SubjectListAV(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+    
+    def delete(self, request, pk):
+        try:
+            subject = SubjectList.objects.get(pk=pk)
+            subject.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except SubjectList.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         
 class ChapterListAV(APIView):
     def get(self, request, pk): 

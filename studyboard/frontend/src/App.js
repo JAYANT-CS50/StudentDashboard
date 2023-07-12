@@ -2,28 +2,30 @@ import { AllRoutes} from "./routes/AllRoutes";
 import {useEffect, useState } from 'react';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
+import { useDispatch } from 'react-redux';
+import { add } from './store/dataSlice';
 import axios from 'axios';
 
 
 
 function App() {
-  const url = 'http://127.0.0.1:8000/dashboard/subjects/'
+  const url = 'http://127.0.0.1:8000/dashboard/subjects/';
   const [subData, setSubData] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  useEffect( () => {
-    
+  const dispatch = useDispatch();
+
+  useEffect(() => {
     axios.get(url)
-    .then(response => {
-      console.log(response.data);
-      setSubData(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  
+      .then(response => {
+        console.log(response.data);
+        setSubData(response.data);
+        dispatch(add(response.data)); // Move dispatch inside the useEffect hook
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, [url, formSubmitted, dispatch]);
 
-
-}, [url, formSubmitted]);
   return (
     <div className='App'>
       <Header />
@@ -34,3 +36,4 @@ function App() {
 }
 
 export default App;
+

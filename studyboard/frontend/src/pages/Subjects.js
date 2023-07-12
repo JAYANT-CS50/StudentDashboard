@@ -1,43 +1,59 @@
-import React,  { useState } from 'react';
+import React,  { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 
-export const Subjects = ({subData, setSubData}) => {
+
+export const Subjects = () => {
   
   const [formData, setFormData] = useState({
     name: '',
     about: '',
     time: ''
   })
+  const subData = useSelector(state => state.userState);
+  const [data, setData] = useState([])
+
+
+  useEffect(() => {
+    setData(subData);
+  }, [subData]);
+  
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
 
-const handleSubmit = (event) => {
-  event.preventDefault();
-  axios.post('http://127.0.0.1:8000/dashboard/subjects/', formData)
-    .then(response => {
-      console.log(response.data);
-      
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios.post('http://127.0.0.1:8000/dashboard/subjects/', formData)
+      .then(response => {
+        console.log(response.data);
+        setData([...data, response.data])
+        
+      })
+      .catch(error => {
+        console.error(error);
+        // Handle error
+      });
+      console.log(data, "check data")
+
+  };
+
+
+  const handleDelete = (item) => {
+    axios.delete(`http://127.0.0.1:8000/dashboard/subjects/${item.id}/`)
+    .then((response) => {
+      console.log(response.data, "deleted subject")
+      setData(data.filter((u) => u.id !== item.id));
     })
-    .catch(error => {
+    .catch((error) => {
       console.error(error);
       // Handle error
     });
+  }
 
-  axios.get('http://127.0.0.1:8000/dashboard/subjects/')
-  .then(response => {
-    setSubData(response.data);
-
-  })
-  .catch(error => {
-    console.error(error);
-    // Handle error
-  });
-  
-};
 
   return (
     <main>
@@ -73,7 +89,7 @@ const handleSubmit = (event) => {
               </tr>
           </thead>
           <tbody>
-            {subData.map(item => (
+            {data.map(item => (
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={item.id}>
 
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -89,7 +105,9 @@ const handleSubmit = (event) => {
                       {item.time}
                   </td>
                   <td className="px-6 py-4">
-                      <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                  <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</button>
+                  <button onClick={() => handleDelete(item)} type="button" className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+
                   </td>
               </tr>
             ))}
