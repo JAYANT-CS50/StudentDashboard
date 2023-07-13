@@ -29,6 +29,20 @@ class SubjectListAV(APIView):
         except SubjectList.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
+    def put(self, request, pk):
+        try:
+            subject = SubjectList.objects.get(pk=pk)
+        except SubjectList.DoesNotExist:
+            return Response({'error': 'Subject not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = SubjectListSerializer(subject, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
 class ChapterListAV(APIView):
     def get(self, request, pk): 
         try:
