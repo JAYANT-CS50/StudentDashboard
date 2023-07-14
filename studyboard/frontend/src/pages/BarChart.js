@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 
 export const BarChart = () => {
-  //const [data, setData] = useState([]);
-  const subData = useSelector(state => state.userState);
+
+  const subData = useSelector(state => state.userState.subList);
  
-
- /* const handleChange = () => {
-    axios.get('http://127.0.0.1:8000/dashboard/subject/')
-      .then(response => {
-        setData(response.data);
-      });
-  };*/
-
   useEffect(() => {
     const chart = new Chart('acquisitions', {
       type: 'bar',
@@ -54,7 +46,6 @@ export const BarChart = () => {
   return (
     <>
       <canvas id="acquisitions"></canvas>
-      
     </>
   );
 };

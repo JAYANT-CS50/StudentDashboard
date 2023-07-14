@@ -24,7 +24,7 @@ function App() {
       .catch(error => {
         console.error(error);
       });
-  }, [url, formSubmitted, dispatch,]);
+  }, []);
 
   return (
     <div className='App'>

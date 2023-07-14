@@ -1,26 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
+
 
 export const PieChart = () => {
-  const [data, setData] = useState([]);
+  
 
-  const handleChange = () => {
-    axios.get('http://127.0.0.1:8000/dashboard/subject/')
-      .then(response => {
-        setData(response.data);
-      });
-  };
+  const subData = useSelector(state => state.userState.subList);
+
+
 
   useEffect(() => {
     const chart = new Chart('piechart', {
       type: 'polarArea',
       data: {
-        labels: data.map(row => row.name),
+        labels: subData.map(row => row.name),
         datasets: [
           {
             label: 'Days',
-            data: data.map(row => row.time),
+            data: subData.map(row => row.time),
             backgroundColor: [
               'rgba(75, 192, 192, 0.6)',
               'rgba(255, 99, 132, 0.6)',
@@ -57,12 +55,12 @@ export const PieChart = () => {
     return () => {
       chart.destroy();
     };
-  }, [data]);
+  }, [subData]);
 
   return (
     <>
       <canvas id="piechart"></canvas>
-      <button onClick={handleChange}>Show</button>
+      
     </>
   );
 };

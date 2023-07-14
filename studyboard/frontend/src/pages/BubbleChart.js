@@ -1,27 +1,22 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
 import Chart from 'chart.js/auto';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export const BubbleChart = () => {
-  const [data, setData] = useState([]);
+  
 
-  const handleChange = () => {
-    axios.get('http://127.0.0.1:8000/dashboard/subject/')
-      .then(response => {
-        setData(response.data);
-      });
-  };
+  const subData = useSelector(state => state.userState.subList);
 
   useEffect(() => {
     const chart = new Chart('bubble', {
       type: 'bubble',
       data: {
-        labels: data.map(row => row.name),
+        labels: subData.map(row => row.name),
         datasets: [
           {
             label: 'Bubble Chart',
-            data: data.map(row => ({
+            data: subData.map(row => ({
               
               x: row.totaltime,
               y: row.chapter_count,
@@ -62,12 +57,11 @@ export const BubbleChart = () => {
     return () => {
       chart.destroy();
     };
-  }, [data]);
+  }, [subData]);
 
   return (
     <>
       <canvas id="bubble"></canvas>
-      <button onClick={handleChange}>Show</button>
     </>
   );
 };

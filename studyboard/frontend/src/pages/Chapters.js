@@ -1,6 +1,7 @@
 import React,  {useEffect, useState } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateChapterCount, updateChapterCountDecrement } from '../store/dataSlice';
 
 
 export const Chapters = ({setFormSubmitted, formSubmitted}) => {
@@ -14,7 +15,8 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
     about: '',
     time: ''
   })
-  const subData = useSelector(state => state.userState);
+  const subData = useSelector(state => state.userState.subList);
+  const dispatch = useDispatch();
   
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -30,7 +32,8 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
     .then((response) => {
       console.log(response.data, "deleted subject")
       setChapterData(chapterData.filter((u) => u.id !== item.id));
-      setFormSubmitted(prevValue => !prevValue);
+      dispatch(updateChapterCountDecrement(selectedSubject))
+      
     })
     .catch((error) => {
       console.error(error);
@@ -107,9 +110,8 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
       axios.post(`http://127.0.0.1:8000/dashboard/subject/${selectedSubject}/chapter/`, formData)
       .then(response => {
         setChapterData([...chapterData, response.data]);
-        //console.log(response.data);
-        // Handle successful response
-        setFormSubmitted(prevValue => !prevValue);// Set form submission to true for refreshing the data as soon as new chapter added . it has beed done to update chapter_count every time
+        dispatch(updateChapterCount(selectedSubject))
+        
         setFormData({
           name: '',
           about: '',
@@ -123,6 +125,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
         console.error(error);
         // Handle error
       });
+      
 
     }
   };
