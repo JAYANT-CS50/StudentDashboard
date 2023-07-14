@@ -1,6 +1,7 @@
 import React,  { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { add, remove, update } from '../store/dataSlice';
 
 
 
@@ -11,15 +12,10 @@ export const Subjects = () => {
     about: '',
     time: ''
   })
-  const subData = useSelector(state => state.userState);
-  const [data, setData] = useState([])
+  const subData = useSelector(state => state.userState.subList);
   const [id, setId] = useState('');
+  const dispatch = useDispatch();
 
-
-  useEffect(() => {
-    setData(subData);
-  }, [subData]);
-  
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
@@ -32,14 +28,7 @@ export const Subjects = () => {
         axios.put(`http://127.0.0.1:8000/dashboard/subject/${id}/`, formData)
         .then((response) => {
           console.log(response.data, "updated subject");
-          setData(data.map((subject) => {
-            if (subject.id === id) {
-              return response.data; // Replace the subject with the updated data
-            } else {
-              return subject; // Keep the other subjects unchanged
-            }
-            
-          }));
+          dispatch(update(response.data));
           setId("");
           setFormData({
             name: '',
@@ -52,14 +41,13 @@ export const Subjects = () => {
           console.error(error);
           // Handle error
         });
-        console.log(data, "check data")
-
       }
       else{
         axios.post('http://127.0.0.1:8000/dashboard/subject/', formData)
         .then(response => {
           console.log(response.data);
-          setData([...data, response.data])
+          //setData([...data, response.data])
+          dispatch(add(response.data));
           setFormData({
             name: '',
             about: '',
@@ -73,8 +61,6 @@ export const Subjects = () => {
           // Handle error
         });
       }
-
-
   };
 
 
@@ -82,11 +68,11 @@ export const Subjects = () => {
     axios.delete(`http://127.0.0.1:8000/dashboard/subject/${item.id}/`)
     .then((response) => {
       console.log(response.data, "deleted subject")
-      setData(data.filter((u) => u.id !== item.id));
+      dispatch(remove(item));
     })
     .catch((error) => {
       console.error(error);
-      // Handle error
+      // Handle error 
     });
   }
 
@@ -135,7 +121,7 @@ export const Subjects = () => {
               </tr>
           </thead>
           <tbody>
-            {data.map(item => (
+            {subData.map(item => (
               <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={item.id}>
 
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
