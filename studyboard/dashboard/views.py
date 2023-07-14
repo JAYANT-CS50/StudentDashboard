@@ -76,3 +76,47 @@ class ChapterListAV(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    def delete(self, request, pk):
+        try:
+            chapter = ChapterList.objects.get(id=pk)
+        except ChapterList.DoesNotExist:
+            return Response({'error': 'Chapter not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        subject = chapter.subjectname
+        chapter.delete()
+        
+        # Update the subject's chapter_count and totaltime after deletion
+        subject.chapter_count = ChapterList.objects.filter(subjectname=subject).count()
+        totaltime = 0
+        time = ChapterList.objects.filter(subjectname=subject)
+        for t in time:
+            totaltime += t.time
+        subject.totaltime = totaltime
+        subject.save()
+        
+        return Response({'message': 'Chapter deleted successfully'})
+
+    def put(self, request, pk):
+        try:
+            chapter = ChapterList.objects.get(id=pk)
+        except ChapterList.DoesNotExist:
+            return Response({'error': 'Chapter not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = ChapterListSerializer(chapter, data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            subject = chapter.subjectname
+            # Update the subject's totaltime after modification
+            totaltime = 0
+            time = ChapterList.objects.filter(subjectname=subject)
+            for t in time:
+                totaltime += t.time
+            subject.totaltime = totaltime
+            subject.save()
+            
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

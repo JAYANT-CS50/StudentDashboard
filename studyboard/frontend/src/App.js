@@ -9,7 +9,7 @@ import axios from 'axios';
 
 
 function App() {
-  const url = 'http://127.0.0.1:8000/dashboard/subjects/';
+  const url = 'http://127.0.0.1:8000/dashboard/subject/';
   const [subData, setSubData] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function App() {
       .catch(error => {
         console.error(error);
       });
-  }, [url, formSubmitted, dispatch]);
+  }, [url, formSubmitted, dispatch,]);
 
   return (
     <div className='App'>

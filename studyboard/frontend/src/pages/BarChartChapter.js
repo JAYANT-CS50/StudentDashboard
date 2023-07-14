@@ -9,7 +9,7 @@ export const BarChartChapter = () => {
   const [data, setData] = useState([]);
 
   const handleChange = (event) => {
-    axios.get('http://127.0.0.1:8000/dashboard/subjects/')
+    axios.get('http://127.0.0.1:8000/dashboard/subject/')
       .then(response => { 
         setData(response.data);
       });

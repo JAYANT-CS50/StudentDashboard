@@ -29,7 +29,7 @@ export const Subjects = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
       if(id){
-        axios.put(`http://127.0.0.1:8000/dashboard/subjects/${id}/`, formData)
+        axios.put(`http://127.0.0.1:8000/dashboard/subject/${id}/`, formData)
         .then((response) => {
           console.log(response.data, "updated subject");
           setData(data.map((subject) => {
@@ -56,7 +56,7 @@ export const Subjects = () => {
 
       }
       else{
-        axios.post('http://127.0.0.1:8000/dashboard/subjects/', formData)
+        axios.post('http://127.0.0.1:8000/dashboard/subject/', formData)
         .then(response => {
           console.log(response.data);
           setData([...data, response.data])
@@ -79,7 +79,7 @@ export const Subjects = () => {
 
 
   const handleDelete = (item) => {
-    axios.delete(`http://127.0.0.1:8000/dashboard/subjects/${item.id}/`)
+    axios.delete(`http://127.0.0.1:8000/dashboard/subject/${item.id}/`)
     .then((response) => {
       console.log(response.data, "deleted subject")
       setData(data.filter((u) => u.id !== item.id));

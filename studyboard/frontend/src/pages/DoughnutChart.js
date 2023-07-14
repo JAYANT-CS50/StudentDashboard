@@ -10,7 +10,7 @@ export const DoughnutChart = ({subData, setSubData}) => {
     
     const selectedOption = event.target.value;
     console.log(selectedOption, "check")
-    axios.get(`http://127.0.0.1:8000/dashboard/subject/${selectedOption}/`)
+    axios.get(`http://127.0.0.1:8000/dashboard/subject/${selectedOption}/chapter/`)
       .then(response => {
         setData(response.data);
       });
