@@ -4,10 +4,46 @@ from rest_framework.response import Response
 from .serializers import SubjectListSerializer, ChapterListSerializer
 from .models import SubjectList, ChapterList
 from rest_framework import status
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from rest_framework import generics, permissions
+from rest_framework.authtoken.models import Token
+from .serializers import UserSerializer, UserRegistrationSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 # Create your views here.
 
+class UserRegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [permissions.AllowAny]
+
+class UserLoginView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def post(self, request, format=None):
+        form = AuthenticationForm(request, data=request.data)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                token, _ = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key})
+        return Response(status=401)
+    
+
+class UserLogoutView(APIView):
+    def post(self, request, format=None):
+        logout(request)
+        return Response(status=204)
+
 class SubjectListAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request): 
         subjects = SubjectList.objects.all()
         serializer = SubjectListSerializer(subjects, many=True)
