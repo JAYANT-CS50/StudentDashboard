@@ -12,8 +12,7 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, UserRegistrationSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
-
-# Create your views here.
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -35,7 +34,6 @@ class UserLoginView(APIView):
                 token, _ = Token.objects.get_or_create(user=user)
                 return Response({'token': token.key})
         return Response(status=401)
-    
 
 class UserLogoutView(APIView):
     def post(self, request, format=None):
@@ -43,31 +41,33 @@ class UserLogoutView(APIView):
         return Response(status=204)
 
 class SubjectListAV(APIView):
-    #permission_classes = [IsAuthenticated]
-    def get(self, request): 
-        subjects = SubjectList.objects.all()
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        subjects = SubjectList.objects.filter(user=request.user)  # Filter subjects by the authenticated user
         serializer = SubjectListSerializer(subjects, many=True)
         return Response(serializer.data)
-    
+
     def post(self, request):
         serializer = SubjectListSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors)
-    
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     def delete(self, request, pk):
         try:
-            subject = SubjectList.objects.get(pk=pk)
+            subject = SubjectList.objects.get(pk=pk, user=request.user)  # Filter subject by ID and authenticated user
             subject.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except SubjectList.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
     def put(self, request, pk):
         try:
-            subject = SubjectList.objects.get(pk=pk)
+            subject = SubjectList.objects.get(pk=pk, user=request.user)  # Filter subject by ID and authenticated user
         except SubjectList.DoesNotExist:
             return Response({'error': 'Subject not found.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -78,33 +78,35 @@ class SubjectListAV(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        
+
 class ChapterListAV(APIView):
-    #permission_classes = [IsAuthenticated]
-    def get(self, request, pk): 
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
         try:
-            subject = SubjectList.objects.get(pk=pk)
+            subject = SubjectList.objects.get(pk=pk, user=request.user)  # Filter subject by ID and authenticated user
             chapters = ChapterList.objects.filter(subjectname=subject)
             serializer = ChapterListSerializer(chapters, many=True)
             return Response(serializer.data)
         except SubjectList.DoesNotExist:
             return Response({'error': 'Subject not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
     def post(self, request, pk):
         try:
-            subject = SubjectList.objects.get(pk=pk)
+            subject = SubjectList.objects.get(pk=pk, user=request.user)  # Filter subject by ID and authenticated user
             serializer = ChapterListSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.save(subjectname=subject)
+                serializer.save(subjectname=subject, user=request.user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except SubjectList.DoesNotExist:
             return Response({'error': 'Subject not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
     def delete(self, request, pk):
         try:
-            chapter = ChapterList.objects.get(id=pk)
+            chapter = ChapterList.objects.get(id=pk, user=request.user)  # Filter chapter by ID and authenticated user
             chapter.delete()
             return Response({'message': 'Chapter deleted successfully'})
         except ChapterList.DoesNotExist:
@@ -112,7 +114,7 @@ class ChapterListAV(APIView):
 
     def put(self, request, pk):
         try:
-            chapter = ChapterList.objects.get(id=pk)
+            chapter = ChapterList.objects.get(id=pk, user=request.user)  # Filter chapter by ID and authenticated user
             serializer = ChapterListSerializer(chapter, data=request.data)
             if serializer.is_valid():
                 serializer.save()

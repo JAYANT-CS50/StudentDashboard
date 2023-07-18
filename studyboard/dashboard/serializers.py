@@ -26,12 +26,11 @@ class SubjectListSerializer(serializers.ModelSerializer):
     #subjectlist = serializers.StringRelatedField(many=True, read_only=True)  # Assuming you want to include the related chapters
     class Meta:
         model = SubjectList
-        fields = '__all__'
-        #exclude = '__user__'
+        exclude = ('user',)
 
 class ChapterListSerializer(serializers.ModelSerializer):
     #subjectname = SubjectListSerializer(read_only=True)  # Assuming you want to include the related subject
     class Meta:
         model = ChapterList
-        exclude = ('subjectname',)
+        exclude = ('subjectname', 'user',)
         
