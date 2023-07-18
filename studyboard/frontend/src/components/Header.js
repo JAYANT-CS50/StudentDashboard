@@ -12,12 +12,12 @@ export const Header = () => {
   };
 
   return (
-    <div>
+    <div className='border-b-4 border-red-50'>
       <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link to="#" className="flex items-center">
-            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+          <Link to="https://github.com/JAYANT-CS50/StudentVBoard" className="flex items-center">
+            <img src="https://cdn.pixabay.com/photo/2017/03/16/21/18/logo-2150297_640.png" className="h-8 mr-3" alt="Flowbite Logo" />
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">StudyBoard</span>
           </Link>
           <button
             data-collapse-toggle="navbar-dropdown"
