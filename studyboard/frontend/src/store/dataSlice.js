@@ -5,8 +5,6 @@ const dataSlice = createSlice({
   name: "user",
   initialState: {
     subList: [],
-    accessToken: '',
-    refreshToken: '',
   }, 
   reducers: {
     add(state, action) {
@@ -50,23 +48,12 @@ const dataSlice = createSlice({
         return item;
       });
       return { ...state, subList: updatedSubList };
-    },
-    setAccessToken(state, action) {
-      return {
-        ...state,
-        accessToken: action.payload
-      };
-    },
-    setRefreshToken(state, action) {
-      return {
-        ...state,
-        refreshToken: action.payload
-      };
     }
+
     
   }
 
 });
 
-export const { add, remove, update, updateChapterCount, updateChapterCountDecrement, setAccessToken, setRefreshToken  } = dataSlice.actions;
+export const { add, remove, update, updateChapterCount, updateChapterCountDecrement  } = dataSlice.actions;
 export const userReducer =  dataSlice.reducer;
