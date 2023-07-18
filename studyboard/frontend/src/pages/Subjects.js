@@ -2,6 +2,8 @@ import React,  { useState,  } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { add, remove, update } from '../store/dataSlice';
 import axiosInstance from '../axiosConfig';
+import jwtDecode from 'jwt-decode';
+
 
 
 
@@ -15,6 +17,10 @@ export const Subjects = () => {
   const subData = useSelector(state => state.userState.subList);
   const [id, setId] = useState('');
   const dispatch = useDispatch();
+  const accessToken = localStorage.getItem('accessToken');
+  const decodedToken = jwtDecode(accessToken);
+  const userId = decodedToken.user_id;
+  console.log(userId, "userid");
   
 
 
@@ -25,44 +31,47 @@ export const Subjects = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-      if(id){
-        axiosInstance.put(`subject/${id}/`, formData)
+    if (id) {
+      axiosInstance
+        .put(`subject/${id}/`, formData)
         .then((response) => {
           console.log(response.data, "updated subject");
           dispatch(update(response.data));
           setId("");
           setFormData({
-            name: '',
-            about: '',
-            time: '',
-      
-          })
+            name: "",
+            about: "",
+            time: "",
+            user: userId, // Include the user field with the userId
+          });
         })
         .catch((error) => {
           console.error(error);
           // Handle error
         });
-      }
-      else{
-        axiosInstance.post('subject/', formData)
-        .then(response => {
+    } else {
+      // Include the user field in the formData object for POST request
+      const formDataWithUser = { ...formData, user: userId };
+  
+      axiosInstance
+        .post("subject/", formDataWithUser)
+        .then((response) => {
           console.log(response.data);
-          //setData([...data, response.data])
           dispatch(add(response.data));
           setFormData({
-            name: '',
-            about: '',
-            time: '',
-      
-          })
-          
+            name: "",
+            about: "",
+            time: "",
+            user: userId, // Include the user field in the cleared form data as well
+          });
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
           // Handle error
         });
-      }
+    }
   };
+  
 
 
   const handleDelete = (item) => {
@@ -82,6 +91,7 @@ export const Subjects = () => {
       name: item.name,
       about: item.about,
       time: item.time,
+      user: item.user
 
     })
     setId(item.id)

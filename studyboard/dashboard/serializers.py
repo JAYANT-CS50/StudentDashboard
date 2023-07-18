@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from dashboard.models import SubjectList, ChapterList
 
@@ -24,16 +23,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 class SubjectListSerializer(serializers.ModelSerializer):
-    student = serializers.StringRelatedField(read_only=True)
+    #subjectlist = serializers.StringRelatedField(many=True, read_only=True)  # Assuming you want to include the related chapters
     class Meta:
         model = SubjectList
         fields = '__all__'
-        
-        
+        #exclude = '__user__'
+
 class ChapterListSerializer(serializers.ModelSerializer):
-    chapter = serializers.StringRelatedField(read_only=True)
+    #subjectname = SubjectListSerializer(read_only=True)  # Assuming you want to include the related subject
     class Meta:
         model = ChapterList
-        #fields = '__all__'
         exclude = ('subjectname',)
-
+        

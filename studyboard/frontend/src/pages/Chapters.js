@@ -2,6 +2,7 @@ import React,  {useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateChapterCount, updateChapterCountDecrement } from '../store/dataSlice';
 import axiosInstance from '../axiosConfig';
+import jwtDecode from 'jwt-decode';
 
 
 export const Chapters = ({setFormSubmitted, formSubmitted}) => {
@@ -10,10 +11,16 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
   const [chapterData, setChapterData] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState('');
   const [id, setId] = useState('');
+  const accessToken = localStorage.getItem('accessToken');
+  const decodedToken = jwtDecode(accessToken);
+  const userId = decodedToken.user_id;
+  console.log(userId, "userid");
   const [formData, setFormData] = useState({
     name: '',
     about: '',
-    time: ''
+    time: '',
+    
+    user: userId
   })
   const subData = useSelector(state => state.userState.subList);
   const dispatch = useDispatch();
