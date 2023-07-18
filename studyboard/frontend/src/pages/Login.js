@@ -36,7 +36,7 @@ export const Login = () => {
         // Redirect or perform any other actions after successful login
         // For example, navigate to the dashboard page
         window.location.href = '/subjects';
-       
+        
       })
       .catch((error) => {
         setError('Invalid username or password');

@@ -1,7 +1,7 @@
-import React,  { useState, useEffect } from 'react';
-import axios from 'axios';
+import React,  { useState,  } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { add, remove, update } from '../store/dataSlice';
+import axiosInstance from '../axiosConfig';
 
 
 
@@ -26,7 +26,7 @@ export const Subjects = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
       if(id){
-        axios.put(`http://127.0.0.1:8000/dashboard/subject/${id}/`, formData)
+        axiosInstance.put(`subject/${id}/`, formData)
         .then((response) => {
           console.log(response.data, "updated subject");
           dispatch(update(response.data));
@@ -44,7 +44,7 @@ export const Subjects = () => {
         });
       }
       else{
-        axios.post('http://127.0.0.1:8000/dashboard/subject/', formData)
+        axiosInstance.post('subject/', formData)
         .then(response => {
           console.log(response.data);
           //setData([...data, response.data])
@@ -66,7 +66,7 @@ export const Subjects = () => {
 
 
   const handleDelete = (item) => {
-    axios.delete(`http://127.0.0.1:8000/dashboard/subject/${item.id}/`)
+    axiosInstance.delete(`subject/${item.id}/`)
     .then((response) => {
       console.log(response.data, "deleted subject")
       dispatch(remove(item));

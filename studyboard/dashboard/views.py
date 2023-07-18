@@ -80,6 +80,7 @@ class SubjectListAV(APIView):
 
         
 class ChapterListAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk): 
         try:
           subject = SubjectList.objects.get(pk = pk)

@@ -1,7 +1,7 @@
 import React,  {useEffect, useState } from 'react';
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateChapterCount, updateChapterCountDecrement } from '../store/dataSlice';
+import axiosInstance from '../axiosConfig';
 
 
 export const Chapters = ({setFormSubmitted, formSubmitted}) => {
@@ -28,7 +28,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
   };
 
   const handleDelete = (item) => {
-    axios.delete(`http://127.0.0.1:8000/dashboard/subject/chapter/${item.id}/`)
+    axiosInstance.delete(`subject/chapter/${item.id}/`)
     .then((response) => {
       console.log(response.data, "deleted subject")
       setChapterData(chapterData.filter((u) => u.id !== item.id));
@@ -58,8 +58,8 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
 
   useEffect(() => {
     if (selectedSubject !== '') {
-      axios
-        .get(`http://127.0.0.1:8000/dashboard/subject/${selectedSubject}/chapter/`)
+      axiosInstance
+        .get(`/subject/${selectedSubject}/chapter/`)
         .then(response => {
           setChapterData(response.data);
           
@@ -81,7 +81,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
     event.preventDefault();
 
     if(id){
-      axios.put(`http://127.0.0.1:8000/dashboard/subject/chapter/${id}/`, formData)
+      axiosInstance.put(`subject/chapter/${id}/`, formData)
       .then((response) => {
         console.log(response.data, "updated subject");
         setChapterData(chapterData.map((subject) => {
@@ -107,7 +107,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
 
     }
     else{
-      axios.post(`http://127.0.0.1:8000/dashboard/subject/${selectedSubject}/chapter/`, formData)
+      axiosInstance.post(`subject/${selectedSubject}/chapter/`, formData)
       .then(response => {
         setChapterData([...chapterData, response.data]);
         dispatch(updateChapterCount(selectedSubject))
