@@ -21,11 +21,28 @@ export const Radar = () => {
           {
             label: 'No. of Chapters',
             data: subData.map(row => row.chapter_count),
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Set the background color for the bars
-            borderColor: 'rgba(75, 192, 192, 1)', // Set the border color for the bars
+            backgroundColor: 'rgb(255, 26, 198, 0.5)', // Set the background color for the bars
+            borderColor: 'rgb(51, 0, 38, 1)', // Set the border color for the bars
             borderWidth: 1, // Set the border width for the bars
           },
         ],
+      },
+      options: {
+        scales: {
+          r: {
+            beginAtZero: true, // Set beginAtZero to true for the radar chart
+          },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Chapters in Each Subject', // Specify the title text
+            font: {
+              size: 20,
+              weight: 'bold',
+            },
+          },
+        },
       },
     });
 

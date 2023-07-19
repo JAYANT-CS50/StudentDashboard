@@ -3,34 +3,54 @@ import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 
 export const BarChart = () => {
-
   const subData = useSelector(state => state.userState.subList);
- 
+
   useEffect(() => {
     const chart = new Chart('acquisitions', {
-      type: 'bar',
+      type: 'bar', // Keep the chart type as 'bar'
       data: {
         labels: subData.map(row => row.name),
         datasets: [
           {
             label: 'Hours/Week',
-            data: subData.map(row => row.totaltime/(row.time/7)),
-            backgroundColor: 'rgba(75, 192, 192, 0.6)', // Set the background color for the first bar
-            borderColor: 'rgba(75, 192, 192, 1)', // Set the border color for the first bar
-            borderWidth: 1, // Set the border width for the first bar
-          }
+            data: subData.map(row => row.totaltime / (row.time / 7)),
+            backgroundColor: 'rgb(51, 255, 51, 0.8)', // Set the background color for the bars
+            borderColor: 'rgb(0, 51, 0)', // Set the border color for the bars
+            borderWidth: 1, // Set the border width for the bars
+          },
         ],
       },
       options: {
+        indexAxis: 'y', // Set the index axis to 'y' for horizontal bars
         scales: {
           y: {
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Hours', // Specify the title text for the y-axis
+              text: 'Subjects', // Specify the title text for the y-axis
             },
             ticks: {
               precision: 0, // Set the precision of the tick values
+            },
+          },
+          x: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Hours', // Specify the title text for the x-axis
+            },
+            ticks: {
+              precision: 0, // Set the precision of the tick values
+            },
+          },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'Hours Per Week', // Specify the title text
+            font: {
+              size: 20,
+              weight: 'bold',
             },
           },
         },
@@ -43,9 +63,5 @@ export const BarChart = () => {
     };
   }, [subData]);
 
-  return (
-    <>
-      <canvas id="acquisitions"></canvas>
-    </>
-  );
+  return <canvas id="acquisitions"></canvas>;
 };

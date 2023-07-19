@@ -13,6 +13,7 @@ from .serializers import UserSerializer, UserRegistrationSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db.models import Sum
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -85,7 +86,7 @@ class ChapterListAV(APIView):
 
     def get(self, request, pk):
         try:
-            subject = SubjectList.objects.get(pk=pk, user=request.user)  # Filter subject by ID and authenticated user
+            subject = SubjectList.objects.get(pk=pk, user=request.user)
             chapters = ChapterList.objects.filter(subjectname=subject)
             serializer = ChapterListSerializer(chapters, many=True)
             return Response(serializer.data)
@@ -94,10 +95,15 @@ class ChapterListAV(APIView):
 
     def post(self, request, pk):
         try:
-            subject = SubjectList.objects.get(pk=pk, user=request.user)  # Filter subject by ID and authenticated user
+            subject = SubjectList.objects.get(pk=pk, user=request.user)
             serializer = ChapterListSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save(subjectname=subject, user=request.user)
+                # Update chapter_count after adding a new chapter
+                subject.chapter_count = ChapterList.objects.filter(subjectname=subject, user=request.user).count()
+                # Update totaltime based on chapters' time
+                subject.totaltime = ChapterList.objects.filter(subjectname=subject, user=request.user).aggregate(Sum('time'))['time__sum']
+                subject.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -106,15 +112,22 @@ class ChapterListAV(APIView):
 
     def delete(self, request, pk):
         try:
-            chapter = ChapterList.objects.get(id=pk, user=request.user)  # Filter chapter by ID and authenticated user
+            chapter = ChapterList.objects.get(id=pk, user=request.user)
+            # Get the subject before deleting the chapter to update chapter_count and totaltime
+            subject = chapter.subjectname
             chapter.delete()
+            # Update chapter_count after deleting a chapter
+            subject.chapter_count = ChapterList.objects.filter(subjectname=subject, user=request.user).count()
+            # Update totaltime based on chapters' time
+            subject.totaltime = ChapterList.objects.filter(subjectname=subject, user=request.user).aggregate(Sum('time'))['time__sum']
+            subject.save()
             return Response({'message': 'Chapter deleted successfully'})
         except ChapterList.DoesNotExist:
             return Response({'error': 'Chapter not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk):
         try:
-            chapter = ChapterList.objects.get(id=pk, user=request.user)  # Filter chapter by ID and authenticated user
+            chapter = ChapterList.objects.get(id=pk, user=request.user)
             serializer = ChapterListSerializer(chapter, data=request.data)
             if serializer.is_valid():
                 serializer.save()

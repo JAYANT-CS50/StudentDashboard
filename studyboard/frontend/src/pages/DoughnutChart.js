@@ -28,13 +28,13 @@ export const DoughnutChart = ({subData, setSubData}) => {
             label: 'Hours',
             data: data.map(row => row.time),
             backgroundColor: [
-              'rgba(255, 99, 132, 0.6)', // Red
-              'rgba(54, 162, 235, 0.6)', // Blue
-              'rgba(255, 205, 86, 0.6)', // Yellow
-              'rgba(75, 192, 192, 0.6)', // Green
-              'rgba(153, 102, 255, 0.6)', // Purple
-              'rgba(255, 159, 64, 0.6)', // Orange
-              'rgba(0, 204, 204, 0.6)', // Teal
+              'rgba(255, 99, 132, 0.8)', // Red
+              'rgba(54, 162, 235, 0.8)', // Blue
+              'rgba(255, 205, 86, 0.8)', // Yellow
+              'rgba(0, 255, 85, 0.8)', // Green
+              'rgba(153, 102, 255, 0.8)', // Purple
+              'rgba(255, 159, 64, 0.8)', // Orange
+              'rgba(0, 204, 204, 0.8)', // Teal
             ],
             
             borderColor: [
@@ -60,6 +60,16 @@ export const DoughnutChart = ({subData, setSubData}) => {
             },
             ticks: {
               precision: 0, // Set the precision of the tick values
+            },
+          },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: 'No. Of Hours Alloted To Each Chapter', // Specify the title text
+            font: {
+              size: 20,
+              weight: 'bold',
             },
           },
         },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Chart from 'chart.js/auto';
 import { useSelector } from 'react-redux';
 
@@ -41,7 +41,7 @@ export const PieChart = () => {
         plugins: {
           title: {
             display: true,
-            text: 'Subjects & Days Alloted', // Specify the title text
+            text: 'Days Alloted Per Subject', // Specify the title text
             font: {
               size: 20,
               weight: 'bold',
