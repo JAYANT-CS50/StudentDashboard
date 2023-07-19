@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const RegistrationPage = () => {
   const [username, setUsername] = useState('');
@@ -27,8 +30,22 @@ export const RegistrationPage = () => {
       .then((response) => {
         // Redirect or perform any other actions after successful registration
         // For example, navigate to the login page
+        toast.success('Regisration Successful Redirecting to Login page!', {
+          position: 'top-right',
+          autoClose: 3000, // Close after 3 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+        });
         console.log("Registration successful");
-        window.location.href = '/';
+        // Delay for 4 seconds before redirecting to another page
+        setTimeout(() => {
+          // Redirect to the login page or any other page
+          window.location.href = '/';
+        }, 4000);
+        
       })
       .catch((error) => {
         setError('Registration failed');
@@ -81,6 +98,7 @@ export const RegistrationPage = () => {
         {error && <p>{error}</p>}
       </form>
     </div>
+    <ToastContainer />
     </section>
     </main>
   );
