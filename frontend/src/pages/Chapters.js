@@ -70,6 +70,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
         .then(response => {
           setChapterData(response.data);
           
+          
         })
         .catch(error => {
           console.error(error);
@@ -116,10 +117,12 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
     else{
       axiosInstance.post(`subject/${selectedSubject}/chapter/`, formData)
       .then(response => {
+        console.log(response.data, "chapter data check");
         setChapterData([...chapterData, response.data]);
-        dispatch(updateChapterCount(selectedSubject))
         
-        setFormData({
+        dispatch(updateChapterCount(selectedSubject));
+        
+        setFormData({   
           name: '',
           about: '',
           time: ''

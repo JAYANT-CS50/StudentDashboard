@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 export const RegistrationPage = () => {
   const [username, setUsername] = useState('');
@@ -9,6 +10,7 @@ export const RegistrationPage = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -52,7 +54,7 @@ export const RegistrationPage = () => {
         // Delay for 4 seconds before redirecting to another page
         setTimeout(() => {
           // Redirect to the login page or any other page
-          window.location.href = '/';
+          navigate('/', { replace: true });
         }, 4000);
       })
       .catch((error) => {

@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-v)s52e207vg$cp&(0bb1-(jtkdh(xarylgil3)druude500no(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -68,7 +68,7 @@ ROOT_URLCONF = 'studyboard.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [],  # Add this line to include the project-level templates directory
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -115,9 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # Add your React app's URL here
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -134,10 +132,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/static/'
 
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend'))
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
+    os.path.join(FRONTEND_DIR, 'build', 'static'),
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

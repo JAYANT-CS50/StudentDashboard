@@ -5,6 +5,7 @@ const dataSlice = createSlice({
   name: "user",
   initialState: {
     subList: [],
+    //totaltime:50,
   }, 
   reducers: {
     add(state, action) {
@@ -28,11 +29,13 @@ const dataSlice = createSlice({
       
     },
     updateChapterCount(state, action) {
+      //const totaltime = state.totaltime
+      
       const id = parseInt(action.payload, 10); // Convert to integer 
       const updatedSubList = state.subList.map(item => {
         if (item.id === id) {
         
-          return { ...item, chapter_count: item.chapter_count + 1 };
+          return { ...item, chapter_count: item.chapter_count + 1};
         }
         return item;
       });
@@ -48,7 +51,7 @@ const dataSlice = createSlice({
         return item;
       });
       return { ...state, subList: updatedSubList };
-    }
+    },
 
     
   }

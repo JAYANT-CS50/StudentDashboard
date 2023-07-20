@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+
+
 
 export const Home = () => {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
+  
+
+
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -30,12 +37,15 @@ export const Home = () => {
 
         // Redirect or perform any other actions after successful login
         // For example, navigate to the dashboard page
-        window.location.href = '/subjects';
+        navigate('/subjects', { replace: true });
+   
       })
       .catch((error) => {
         setError('Invalid username or password');
       });
   };
+
+    // If redirectToSubjects is true, redirect to the dashboard page
 
   return (
     <main className="bg-gray-100 min-h-16">

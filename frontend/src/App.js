@@ -5,12 +5,15 @@ import { Header } from './components/Header';
 import { useDispatch } from 'react-redux';
 import { add } from './store/dataSlice';
 import axiosInstance from './axiosConfig';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [subData, setSubData] = useState([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const dispatch = useDispatch();
   const accessToken = localStorage.getItem('accessToken');
+  const navigate = useNavigate();
+  const [reload, setReload] = useState(true);
 
   useEffect(() => {
     if (accessToken) {
@@ -23,8 +26,17 @@ function App() {
         .catch(error => {
           console.error(error);
         });
+
     }
   }, [accessToken]);
+
+  if (accessToken && reload) {
+    setReload(false);
+    navigate('/subjects', { replace: true });
+  }
+
+
+
 
   return (
     <div className='App'>
