@@ -1,6 +1,6 @@
 import React,  {useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateChapterCount, updateChapterCountDecrement } from '../store/dataSlice';
+import { updateChapterCount, updateChapterCountDecrement, updateTotalTime } from '../store/dataSlice';
 import axiosInstance from '../axiosConfig';
 import jwtDecode from 'jwt-decode';
 
@@ -14,7 +14,6 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
   const accessToken = localStorage.getItem('accessToken');
   const decodedToken = jwtDecode(accessToken);
   const userId = decodedToken.user_id;
-  console.log(userId, "userid");
   const [formData, setFormData] = useState({
     name: '',
     about: '',
@@ -41,6 +40,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
       setChapterData(chapterData.filter((u) => u.id !== item.id));
       dispatch(updateChapterCountDecrement(selectedSubject))
       
+      
     })
     .catch((error) => {
       console.error(error);
@@ -61,8 +61,6 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
   }
 
 
-
-
   useEffect(() => {
     if (selectedSubject !== '') {
       axiosInstance
@@ -79,12 +77,6 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
   }, [selectedSubject]);
 
 
-  useEffect(() => {
-    setTotalTime(chapterData.reduce((total, chapter) => total + chapter.time, 0));
-
-  },[chapterData])
-  
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -100,6 +92,9 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
           }
           
         }));
+
+        
+        
         setId("");
         setFormData({
           name: '',
@@ -117,16 +112,18 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
     else{
       axiosInstance.post(`subject/${selectedSubject}/chapter/`, formData)
       .then(response => {
-        console.log(response.data, "chapter data check");
+        console.log(response.data, "entered chapter data");
         setChapterData([...chapterData, response.data]);
-        
-        dispatch(updateChapterCount(selectedSubject));
+        dispatch(updateChapterCount(selectedSubject))
+
         
         setFormData({   
           name: '',
           about: '',
           time: ''
         })
+        // Calculate total time after chapter is posted
+        
 
 
       
@@ -139,6 +136,19 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
 
     }
   };
+  useEffect(() => {
+    const newTotalTime = chapterData.reduce((total, chapter) => total + chapter.time, 0) 
+    setTotalTime(newTotalTime);
+   
+  }, [chapterData]);
+
+
+  useEffect(() => {
+    dispatch(updateTotalTime({id: selectedSubject, time: totalTime}));
+   
+  }, [totalTime]);
+
+
 
 
   return (
