@@ -7,10 +7,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls')),
     path('api/auth/', include('django.contrib.auth.urls')),
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
     
     
 
 ]   
-urlpatterns += [
-    path('', TemplateView.as_view(template_name='index.html')),
-]
+
