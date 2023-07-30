@@ -70,8 +70,8 @@ To run the Student Dashboard on your local machine, follow these steps:
 1. Clone the GitHub repository:
 
 ```bash
-git clone https://github.com/your-username/student-dashboard.git
-cd student-dashboard
+git clone https://github.com/your-username/StudentDashboard.git
+cd StudentDashboard
 ```
 
 2. Set up the Django environment and database:
@@ -93,7 +93,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Create the database tables
-python manage.py migrate
+python3 manage.py migrate
 ```
 
 3. Set up the React front-end:
@@ -102,18 +102,22 @@ python manage.py migrate
 cd frontend
 npm install
 ```
+4. Build the application:
 
-4. Run the application:
+```bash
+cd frontend
+npm run build
+rm build/index.html
+```
+5. Run the application:
 
 ```bash
 # Start the Django development server
-python manage.py runserver
+python3 manage.py runserver
 
-# Start the React development server
-npm start
 ```
 
-Access the application in your web browser at `http://localhost:3000/`.
+Access the application in your web browser at `http://localhost:8000/`.
 
 ## Contributing
 
