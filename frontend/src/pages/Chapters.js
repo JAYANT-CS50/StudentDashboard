@@ -157,7 +157,7 @@ export const Chapters = ({setFormSubmitted, formSubmitted}) => {
         <div className='flex justify-center'>
           <form onSubmit={handleSubmit}>
               <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder='Chapter Name' className="rounded p-2 mx-8 bg-slate-200" autoComplete='off' required/>
-              <input type="text" name="about" value={formData.about} onChange={handleChange} placeholder='description' className="rounded p-2 mx-8 bg-slate-200" autoComplete='off' required/>
+              <input type="text" name="about" value={formData.about} onChange={handleChange} placeholder='Description' className="rounded p-2 mx-8 bg-slate-200" autoComplete='off' required/>
               <input type="number" name="time" value={formData.time} onChange={handleChange} placeholder='Hours' className="rounded p-2 mx-8 bg-slate-200" autoComplete='off' required  min="1"/>
               <button type="submit"  className={id ? "text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800" : 'text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mx-8'}>{id ? 'Update Chapter': 'Add Chapter'}</button>
               <div className='flex justify-center mt-5'>

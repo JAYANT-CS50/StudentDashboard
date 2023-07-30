@@ -29,7 +29,7 @@ const dataSlice = createSlice({
     },
     updateChapterCount(state, action) {
       
-      const id = parseInt(action.payload.id, 10); // Convert to integer
+      const id = parseInt(action.payload, 10); // Convert to integer
 
       const updatedSubList = state.subList.map(item => {
         if (item.id === id) {
