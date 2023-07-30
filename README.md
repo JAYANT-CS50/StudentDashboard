@@ -18,7 +18,7 @@ Youtube - https://youtu.be/lzAvQlk5UQo
 
 The Student Dashboard application is built using the following technologies:
 
-- Front-end: React, HTML, JavaScript, Tailwind CSS, Chart.js
+- Front-end: React, HTML, JavaScript, Tailwind CSS, Chart.js, Redux
 - Back-end: Django, Django REST Framework, JWT
 - Database: PostgreSQL
 
@@ -107,11 +107,17 @@ npm install
 ```bash
 cd frontend
 npm run build
+
+# Remove the index file from build folder
 rm build/index.html
 ```
 5. Run the application:
 
 ```bash
+# Change the directory
+cd ..
+cd backend
+
 # Start the Django development server
 python3 manage.py runserver
 
